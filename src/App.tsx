@@ -1,7 +1,13 @@
 import { useCallback, useState } from 'react';
 import ReactFlow, {
+  Background,
+  BackgroundVariant,
+  Controls,
   EdgeChange,
+  MiniMap,
+  Node,
   NodeChange,
+  Panel,
   applyEdgeChanges,
   applyNodeChanges,
 } from 'reactflow';
@@ -23,6 +29,22 @@ export default function App() {
     [setEdges]
   );
 
+  const nodeColor = (node: Node) => {
+    switch (node.type) {
+      case 'input':
+        return '#6ede87';
+      case 'output':
+        return '#6865A5';
+      default:
+        return '#ff0072';
+    }
+  };
+
+  const log = () => {
+    console.log('nodes', nodes);
+    console.log('edges', edges);
+  };
+
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       <ReactFlow
@@ -31,7 +53,14 @@ export default function App() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         fitView
-      ></ReactFlow>
+      >
+        <MiniMap nodeColor={nodeColor} />
+        <Controls />
+        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        <Panel position="top-left">
+          <button onClick={log}>Log</button>
+        </Panel>
+      </ReactFlow>
     </div>
   );
 }
